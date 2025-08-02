@@ -1,1 +1,92 @@
-<h1>Hello!</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>STEM Gender Pay Gap</title>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 30px; }
+    svg { width: 100%; height: 500px; }
+    .bar { cursor: pointer; }
+    .back-button { margin-bottom: 20px; cursor: pointer; color: blue; text-decoration: underline; display: none; }
+  </style>
+</head>
+<body>
+  <h1>Gender Pay Gaps in STEM Occupations</h1>
+  <div class="back-button" onclick="showOverview()">&larr; Back</div>
+  <div id="scene"></div>
+
+  <script>
+    const csvUrl = 'cleaned_stem_earnings.csv'; // Use local path if needed
+    let rawData = [];
+
+    function showOverview() {
+      d3.select('.back-button').style('display', 'none');
+      const container = d3.select('#scene').html('');
+
+      const svg = container.append('svg');
+      const margin = { top: 40, right: 20, bottom: 100, left: 80 };
+      const width = 960 - margin.left - margin.right;
+      const height = 500 - margin.top - margin.bottom;
+      const g = svg.append('g').attr('transform', `translate(${margin.left},${margin.top})`);
+
+      const x = d3.scaleBand()
+        .domain(rawData.map(d => d.Occupation))
+        .range([0, width])
+        .padding(0.2);
+
+      const y = d3.scaleLinear()
+        .domain([0, d3.max(rawData, d => d.Difference)]).nice()
+        .range([height, 0]);
+
+      g.append('g')
+        .call(d3.axisLeft(y));
+
+      g.append('g')
+        .attr('transform', `translate(0,${height})`)
+        .call(d3.axisBottom(x))
+        .selectAll('text')
+        .attr('transform', 'rotate(-45)')
+        .style('text-anchor', 'end');
+
+      g.selectAll('.bar')
+        .data(rawData)
+        .enter()
+        .append('rect')
+        .attr('class', 'bar')
+        .attr('x', d => x(d.Occupation))
+        .attr('y', d => y(d.Difference))
+        .attr('width', x.bandwidth())
+        .attr('height', d => height - y(d.Difference))
+        .attr('fill', d => d.Significant === '*' ? '#ff7f0e' : '#1f77b4')
+        .on('click', d => showDetail(d));
+    }
+
+    function showDetail(d) {
+      d3.select('.back-button').style('display', 'block');
+      const container = d3.select('#scene').html('');
+
+      container.append('h2').text(d.Occupation);
+      container.append('p').html(`
+        <strong>All Workers:</strong> $${d.All_Workers.toLocaleString()}<br>
+        <strong>Male:</strong> $${d.Male.toLocaleString()}<br>
+        <strong>Female:</strong> $${d.Female.toLocaleString()}<br>
+        <strong>Difference:</strong> $${d.Difference.toLocaleString()}<br>
+        <strong>Significant:</strong> ${d.Significant === '*' ? 'Yes' : 'No'}
+      `);
+    }
+
+    d3.csv(csvUrl, d => ({
+      Occupation: d.Occupation,
+      All_Workers: +d.All_Workers,
+      Male: +d.Male,
+      Female: +d.Female,
+      Difference: +d.Difference,
+      Significant: d.Significant
+    })).then(data => {
+      rawData = data;
+      showOverview();
+    });
+  </script>
+</body>
+</html>
