@@ -3,21 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <title>STEM Gender Pay Gap</title>
-  <script src="https://d3js.org/d3.v7.min.js"></script>
-  <style>
-    body { font-family: Arial, sans-serif; margin: 30px; }
-    svg { width: 100%; height: 500px; }
-    .bar { cursor: pointer; }
-    .back-button { margin-bottom: 20px; cursor: pointer; color: blue; text-decoration: underline; display: none; }
-  </style>
+  <script src="https://d3js.org/d3.v5.min.js"></script>
 </head>
 <body>
   <h1>Gender Pay Gaps in STEM Occupations</h1>
-  <div class="back-button" onclick="showOverview()">&larr; Back</div>
+  <div class="back-button" onclick="showOverview()">Back</div>
+  <svg width=150 height=300></svg>
   <div id="scene"></div>
+  
 
   <script>
-    const csvUrl = 'cleaned_stem_earnings.csv'; // Use local path if needed
+    const csvUrl = 'nsf-cleaned.csv';
     let rawData = [];
 
     function showOverview() {
@@ -77,8 +73,8 @@
     }
 
     d3.csv(csvUrl, d => ({
-      Occupation: d.Occupation,
-      All_Workers: +d.All_Workers,
+      Occupation: d.Detailec_occupations,
+      All_Workers: +d.All_workers,
       Male: +d.Male,
       Female: +d.Female,
       Difference: +d.Difference,
