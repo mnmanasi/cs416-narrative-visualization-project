@@ -1,4 +1,4 @@
-﻿Detailed occupations,All workers,Male,Female,Difference,Significant
+Occupations,All,Male,Female,Difference,Significant
 School psychologists,"74,821","82,393","74,525","7,868",empty
 Chemists and materials scientists,"74,482","74,922","71,629","3,293",empty
 "Computer occupations, all other","72,981","74,303","69,722","4,581",*
@@ -28,3 +28,4 @@ Roofers,"37,431","37,452","28,563","-8,889", empty
 "Drywall installers, ceiling tile installers, and tapers","36,024","36,400","31,585","4,815", empty
 Chefs and head cooks,"35,852","39,549","29,536","10,013",*
 "Butchers and other meat, poultry, and fish processing workers","35,844","37,813","29,852","7,961",*
+
