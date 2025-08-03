@@ -1,30 +1,32 @@
-﻿Detailed occupations,All workers,Male,Female,Difference,Significant
-School psychologists,74821,82393,74525,7868,empty
-Chemists and materials scientists,74482,74922,71629,3293,empty
-"Computer occupations, all other",72981,74303,69722,4581,*
-Biological scientists,69955,71280,69623,1657,empty
-Web and digital interface designers,69451,69608,69306,302,empty
-Agricultural and food scientists,68420,74669,62486,12183,*
-"Environmental scientists and specialists, incl. health",64456,69654,59890,9764,*
-Computer support specialists,59968,61450,57216,4234,*
-Conservation scientists and foresters,59608,61649,58381,3268,empty
-Logisticians,57083,59972,51399,8573,*
-"Other life, physical, and social science technicians",46862,49290,44680,4610,*
-Licensed practical and licensed vocational nurses,44936,49924,44882,5042,*
-Medical records specialists,44333,47089,43975,3114,empty
-Misc. health technologists and technicians,44325,53736,39510,14226,*
-"Opticians, dispensing",39356,49938,35212,14726,*
-Emergency medical technicians,38955,39974,34836,5138,*
-Pharmacy technicians,35602,38958,34963,3995,*
-Psychiatric technicians,34153,34701,33718,983,empty
-Veterinary technologists and technicians,32941,37868,31936,5932,*
-"Other installation, maintenance, and repair workers",43945,44604,35879,8725,*
-Automotive service technicians and mechanics,42903,42943,34042,8901,*
-Carpenters,41576,41715,38871,2844,empty
-Etchers and engravers,40642,40066,40669,-603,empty
-Prepress technicians and workers,39342,44220,29984,14236,*
-"Misc. production workers, incl. equipment operators and tenders",38238,39998,31904,8094,*
-Roofers,37431,37452,28563,-8889, empty
-"Drywall installers, ceiling tile installers, and tapers",36024,36400,31585,4815, empty
-Chefs and head cooks,35852,39549,29536,10013,*
-"Butchers and other meat, poultry, and fish processing workers",35844,37813,29852,7961,*
+﻿Detailed occupations,Field,All workers,Male,Female,Difference,Significant
+School psychologists,S&E,74821,82393,74525,7868,empty
+Chemists and materials scientists,S&E,74482,74922,71629,3293,empty
+"Computer occupations, all other",S&E,72981,74303,69722,4581,*
+Biological scientists,S&E,69955,71280,69623,1657,empty
+Web and digital interface designers,S&E,69451,69608,69306,302,empty
+Agricultural and food scientists,S&E,68420,74669,62486,12183,*
+"Environmental scientists and specialists, incl. health",S&E,64456,69654,59890,9764,*
+Computer support specialists,S&E,59968,61450,57216,4234,*
+Conservation scientists and foresters,S&E,59608,61649,58381,3268,empty
+Logisticians,S&E,57083,59972,51399,8573,*
+"Other life, physical, and social science technicians",S&E-related,46862,49290,44680,4610,*
+Licensed practical and licensed vocational nurses,S&E-related,44936,49924,44882,5042,*
+Medical records specialists,S&E-related,44333,47089,43975,3114,empty
+Misc. health technologists and technicians,S&E-related,44325,53736,39510,14226,*
+"Opticians, dispensing",S&E-related,39356,49938,35212,14726,*
+Emergency medical technicians,S&E-related,38955,39974,34836,5138,*
+Pharmacy technicians,S&E-related,35602,38958,34963,3995,*
+Psychiatric technicians,S&E-related,34153,34701,33718,983,empty
+Veterinary technologists and technicians,S&E-related,32941,37868,31936,5932,*
+Dietetic technicians and ophthalmic medical technicians,S&E-related,29981,29802,30129,-327,empty
+"Other installation, maintenance, and repair workers",STEM middle-skill,43945,44604,35879,8725,*
+Automotive service technicians and mechanics,STEM middle-skill,42903,42943,34042,8901,*
+Carpenters,STEM middle-skill,41576,41715,38871,2844,empty
+Etchers and engravers,STEM middle-skill,40642,40066,40669,-603,empty
+Prepress technicians and workers,STEM middle-skill,39342,44220,29984,14236,*
+"Misc. production workers, incl. equipment operators and tenders",STEM middle-skill,38238,39998,31904,8094,*
+Roofers,STEM middle-skill,37431,37452,28563,-8889, empty
+"Drywall installers, ceiling tile installers, and tapers",STEM middle-skill,36024,36400,31585,4815, empty
+Chefs and head cooks,STEM middle-skill,35852,39549,29536,10013,*
+"Butchers and other meat, poultry, and fish processing workers",STEM middle-skill,35844,37813,29852,7961,*
+
