@@ -81,6 +81,15 @@
         .text("Click a bar to see occupation-level earnings.");
     }
 
+    function addAnnotation(svg, text, x = width - 300, y = -20) {
+      svg.append("text")
+        .attr("class", "annotation")
+        .attr("x", x)
+        .attr("y", y)
+        .text(text);
+    }
+
+
     function showScene2(d) {
       params.currentScene = 'detail';
       selectedCategory = d;
@@ -170,12 +179,12 @@
 
 
     d3.csv(csvUrl, d => ({
-      Occupation: d.Occupation,
-      All_Workers: d.All,
-      Male: d.Male,
-      Female: d.Female,
-      Difference: d.Difference,
-      Significant: d.Significant
+      Occupation: d['Detailed occupations'],
+      All_Workers:  +d['All workers'],
+      Male: +d['Male'],
+      Female: +d['Female'],
+      Difference: +d['Difference'],
+      Significant: d['Significant']
     })).then(data => {
       rawData = data;
       showOverview();
