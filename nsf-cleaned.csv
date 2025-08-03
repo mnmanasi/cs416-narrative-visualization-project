@@ -1,31 +1,30 @@
-Occupations,All,Male,Female,Difference,Significant
-School psychologists,"74,821","82,393","74,525","7,868",empty
-Chemists and materials scientists,"74,482","74,922","71,629","3,293",empty
-"Computer occupations, all other","72,981","74,303","69,722","4,581",*
-Biological scientists,"69,955","71,280","69,623","1,657",empty
-Web and digital interface designers,"69,451","69,608","69,306",302,empty
-Agricultural and food scientists,"68,420","74,669","62,486","12,183",*
-"Environmental scientists and specialists, incl. health","64,456","69,654","59,890","9,764",*
-Computer support specialists,"59,968","61,450","57,216","4,234",*
-Conservation scientists and foresters,"59,608","61,649","58,381","3,268",empty
-Logisticians,"57,083","59,972","51,399","8,573",*
-"Other life, physical, and social science technicians","46,862","49,290","44,680","4,610",*
-Licensed practical and licensed vocational nurses,"44,936","49,924","44,882","5,042",*
-Medical records specialists,"44,333","47,089","43,975","3,114",empty
-Misc. health technologists and technicians,"44,325","53,736","39,510","14,226",*
-"Opticians, dispensing","39,356","49,938","35,212","14,726",*
-Emergency medical technicians,"38,955","39,974","34,836","5,138",*
-Pharmacy technicians,"35,602","38,958","34,963","3,995",*
-Psychiatric technicians,"34,153","34,701","33,718",983,empty
-Veterinary technologists and technicians,"32,941","37,868","31,936","5,932",*
-"Other installation, maintenance, and repair workers","43,945","44,604","35,879","8,725",*
-Automotive service technicians and mechanics,"42,903","42,943","34,042","8,901",*
-Carpenters,"41,576","41,715","38,871","2,844",empty
-Etchers and engravers,"40,642","40,066","40,669",-603,empty
-Prepress technicians and workers,"39,342","44,220","29,984","14,236",*
-"Misc. production workers, incl. equipment operators and tenders","38,238","39,998","31,904","8,094",*
-Roofers,"37,431","37,452","28,563","-8,889", empty
-"Drywall installers, ceiling tile installers, and tapers","36,024","36,400","31,585","4,815", empty
-Chefs and head cooks,"35,852","39,549","29,536","10,013",*
-"Butchers and other meat, poultry, and fish processing workers","35,844","37,813","29,852","7,961",*
-
+﻿Detailed occupations,All workers,Male,Female,Difference,Significant
+School psychologists,74821,82393,74525,7868,empty
+Chemists and materials scientists,74482,74922,71629,3293,empty
+"Computer occupations, all other",72981,74303,69722,4581,*
+Biological scientists,69955,71280,69623,1657,empty
+Web and digital interface designers,69451,69608,69306,302,empty
+Agricultural and food scientists,68420,74669,62486,12183,*
+"Environmental scientists and specialists, incl. health",64456,69654,59890,9764,*
+Computer support specialists,59968,61450,57216,4234,*
+Conservation scientists and foresters,59608,61649,58381,3268,empty
+Logisticians,57083,59972,51399,8573,*
+"Other life, physical, and social science technicians",46862,49290,44680,4610,*
+Licensed practical and licensed vocational nurses,44936,49924,44882,5042,*
+Medical records specialists,44333,47089,43975,3114,empty
+Misc. health technologists and technicians,44325,53736,39510,14226,*
+"Opticians, dispensing",39356,49938,35212,14726,*
+Emergency medical technicians,38955,39974,34836,5138,*
+Pharmacy technicians,35602,38958,34963,3995,*
+Psychiatric technicians,34153,34701,33718,983,empty
+Veterinary technologists and technicians,32941,37868,31936,5932,*
+"Other installation, maintenance, and repair workers",43945,44604,35879,8725,*
+Automotive service technicians and mechanics,42903,42943,34042,8901,*
+Carpenters,41576,41715,38871,2844,empty
+Etchers and engravers,40642,40066,40669,-603,empty
+Prepress technicians and workers,39342,44220,29984,14236,*
+"Misc. production workers, incl. equipment operators and tenders",38238,39998,31904,8094,*
+Roofers,37431,37452,28563,-8889, empty
+"Drywall installers, ceiling tile installers, and tapers",36024,36400,31585,4815, empty
+Chefs and head cooks,35852,39549,29536,10013,*
+"Butchers and other meat, poultry, and fish processing workers",35844,37813,29852,7961,*
