@@ -71,7 +71,7 @@
         .attr('width', x.bandwidth())
         .attr('height', d => height - y(d.Difference))
         .attr('fill', d => d.Significant === '*' ? '#ff7f0e' : '#1f77b4')
-        .on('click', d => showScene2);
+        .on('click', (event, d) => showScene2(d));
 
       // Annotation
       g.append("text")
@@ -171,10 +171,10 @@
 
     d3.csv(csvUrl, d => ({
       Occupation: d.Occupation,
-      All_Workers: +d.All,
-      Male: +d.Male,
-      Female: +d.Female,
-      Difference: +d.Difference,
+      All_Workers: d.All,
+      Male: d.Male,
+      Female: d.Female,
+      Difference: d.Difference,
       Significant: d.Significant
     })).then(data => {
       rawData = data;
