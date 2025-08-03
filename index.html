@@ -9,12 +9,12 @@
     svg { width: 960px; height: 500px; }
     .bar { cursor: pointer; }
     .annotation { font-size: 14px; fill: black; font-weight: bold; }
-    .back-button { cursor: pointer; color: blue; text-decoration: underline; margin-bottom: 20px; }
+    .back-button { cursor: pointer; color: blue; text-decoration: underline; margin-bottom: 20px; display: none; }
   </style>
 </head>
 <body>
   <h1>Gender Pay Gaps in STEM Occupations</h1>
-  <div class="back-button" onclick="showOverview()" style="margin-bottom: 20px; cursor: pointer; color: blue; text-decoration: underline;">Back</div> 
+  <div class="back-button" onclick="showOverview()" style="margin-bottom: 20px; cursor: pointer; color: blue; text-decoration: underline; display: none;">&larr; Back</div> 
   <div id="scene"></div>
   
   <script>
@@ -77,7 +77,7 @@
       g.append("text")
         .attr("class", "annotation")
         .attr("x", width - 300)
-        .attr("y", 0)
+        .attr("y", -10)
         .text("Click a bar to see occupation-level earnings.");
     }
 
@@ -89,8 +89,9 @@
 
       const container = d3.select('#scene');
       const svg = container.append('svg');
+      const g = svg.append('g').attr('transform', `translate(${margin.left},${margin.top})`);
 
-      svg.append('text')
+      g.append('text')
         .attr('x', 0)
         .attr('y', 0)
         .attr('font-size', 20)
@@ -137,10 +138,10 @@
       const x = d3.scaleBand()
         .domain(grouped.map(d => d[0]))
         .range([0, width])
-        .padding(0.2);
+        .padding(0.4);
 
       const y = d3.scaleLinear()
-        .domain([0, d3.max(grouped, g => g[1].length)]).nice()
+        .domain([0, d3.max(grouped, d => d[1].length)]).nice()
         .range([height, 0]);
 
       g.append('g').call(d3.axisLeft(y));
@@ -163,17 +164,17 @@
       g.append("text")
         .attr("class", "annotation")
         .attr("x", width - 300)
-        .attr("y", 0)
+        .attr("y", -10)
         .text("Counts of occupations by significance.");
     }
 
 
     d3.csv(csvUrl, d => ({
       Occupation: d.Occupation,
-      All_Workers: +d.All.replace(/,/g, ''),
-      Male: +d.Male.replace(/,/g, ''),
-      Female: +d.Female.replace(/,/g, ''),
-      Difference: +d.Difference.replace(/,/g, ''),
+      All_Workers: +d.All,
+      Male: +d.Male,
+      Female: +d.Female,
+      Difference: +d.Difference,
       Significant: d.Significant
     })).then(data => {
       rawData = data;
