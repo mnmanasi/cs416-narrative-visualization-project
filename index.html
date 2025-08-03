@@ -33,6 +33,14 @@
     function clearScene() {
       d3.select('#scene').html('');
     }   
+
+    function addAnnotation(svg, text, x = width - 300, y = -20) {
+      svg.append("text")
+        .attr("class", "annotation")
+        .attr("x", x)
+        .attr("y", y)
+        .text(text);
+    }
     
     function showOverview() {
       params.currentScene = 'overview';
@@ -71,26 +79,13 @@
         .attr('width', x.bandwidth())
         .attr('height', d => height - y(d.Difference))
         .attr('fill', d => d.Significant === '*' ? '#ff7f0e' : '#1f77b4')
-        .on('click', (event, d) => showScene2(d));
+        .on('click', (event, d) => showDetailScene(d));
 
       // Annotation
-      g.append("text")
-        .attr("class", "annotation")
-        .attr("x", width - 300)
-        .attr("y", -10)
-        .text("Click a bar to see occupation-level earnings.");
+      addAnnotation(g, "Click a bar to see occupation-level earnings.");
     }
 
-    function addAnnotation(svg, text, x = width - 300, y = -20) {
-      svg.append("text")
-        .attr("class", "annotation")
-        .attr("x", x)
-        .attr("y", y)
-        .text(text);
-    }
-
-
-    function showScene2(d) {
+    function showDetailScene(d) {
       params.currentScene = 'detail';
       selectedCategory = d;
       d3.select('.back-button').style('display', 'block');
@@ -114,23 +109,16 @@
         `Statistically Significant: ${d.Significant === '*' ? 'Yes' : 'No'}`
       ];
 
-      annotations.forEach((text, i) => {
-        svg.append('text')
-          .attr('x', 0)
-          .attr('y', 40 + i * 30)
-          .attr('class', 'annotation')
-          .text(text);
-      });
+      addAnnotation(g, `All Workers: $${d.All_Workers}`, 0, 40);
+      addAnnotation(g, `Male: $${d.Male}`, 0, 70);
+      addAnnotation(g, `Female: $${d.Female}`, 0, 100);
+      addAnnotation(g, `Difference: $${d.Difference}`, 0, 130);
+      addAnnotation(g, `Statistically Significant: ${d.Significant === '*' ? 'Yes' : 'No'}`, 0, 160);
+      addAnnotation(g, 'Click below to compare occupations by significance.', 0, 220);
 
-      svg.append('text')
-        .attr('x', 0)
-        .attr('y', 250)
-        .attr('class', 'annotation')
-        .text('Click below to compare occupations by significance.');
-
-      const button = container.append('button')
+      container.append('button')
         .text('Compare by Significance')
-        .on('click', showScene3);
+        .on('click', showSignificanceScene);
     }
 
     function showScene3() {
@@ -170,11 +158,7 @@
         .attr('height', d => height - y(d[1].length))
         .attr('fill', d => d[0] === 'Significant' ? '#ff7f0e' : '#1f77b4');
 
-      g.append("text")
-        .attr("class", "annotation")
-        .attr("x", width - 300)
-        .attr("y", -10)
-        .text("Counts of occupations by significance.");
+      addAnnotation(g, "Counts of occupations by significance.");
     }
 
 
