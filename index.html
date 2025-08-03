@@ -7,12 +7,12 @@
 </head>
 <body>
   <h1>Gender Pay Gaps in STEM Occupations</h1>
-  <div class="back-button" onclick="showOverview()">Back</div>
-  <svg width=150 height=300></svg>
+  <div class="back-button" onclick="showOverview()" style="margin-bottom: 20px; cursor: pointer; color: blue; text-decoration: underline; display: none;">&larr; Back</div>
   <div id="scene"></div>
+  <svg width="150" height="300"></svg>
   
   <script>
-    const csvUrl = 'nsf-cleaned.csv';
+    const csvUrl = 'ndf-cleaned.csv';
     let rawData = [];
 
     function showOverview() {
@@ -72,8 +72,8 @@
     }
 
     d3.csv(csvUrl, d => ({
-      Occupation: d.Detailed_occupations,
-      All_Workers: +d.All_workers,
+      Occupation: d.Occupation,
+      All_Workers: +d.All_Workers,
       Male: +d.Male,
       Female: +d.Female,
       Difference: +d.Difference,
@@ -82,6 +82,45 @@
       rawData = data;
       showOverview();
     });
+
+    const mpgData = await d3.csv("https://flunky.github.io/cars2017.csv", d => ({
+      city: +d.AverageCityMPG,
+      highway: +d.AverageHighwayMPG,
+      cylinders: +d.EngineCylinders
+    }));
+
+    const svgMPG = d3.select("svg");
+    const gMPG = svgMPG.append("g").attr("transform", "translate(50,50)");
+
+    const x = d3.scaleLog().base(10).domain([10, 150]).range([0, 200]);
+    const y = d3.scaleLog().base(10).domain([10, 150]).range([200, 0]);
+
+    const xAxis = d3.axisBottom(x).tickValues([10, 20, 50, 100]).tickFormat(d3.format("~s"));
+    const yAxis = d3.axisLeft(y).tickValues([10, 20, 50, 100]).tickFormat(d3.format("~s"));
+
+    gMPG.selectAll("circle")
+      .data(mpgData)
+      .enter()
+      .append("circle")
+      .attr("cx", d => x(d.city))
+      .attr("cy", d => y(d.highway))
+      .attr("r", d => 2 + d.cylinders);
+
+    gMPG.append("g")
+      .attr("transform", "translate(50,50)")
+      .call(yAxis)
+      .attr("fill", "none")
+      .attr("font-family", "sans-serif")
+      .attr("font-size", 10)
+      .attr("text-anchor", "end");
+
+    gMPG.append("g")
+      .attr("transform", "translate(50,250)")
+      .call(xAxis)
+      .attr("fill", "none")
+      .attr("font-family", "sans-serif")
+      .attr("font-size", 10)
+      .attr("text-anchor", "middle");
   </script>
 </body>
 </html>
