@@ -47,12 +47,7 @@
         .text(text);
     }
 
-    function addFieldLegend(svg, categories, colorScale, x=30, y=10) {
-      // svg - the D3 SVG selection
-      // categories - array of field names
-      // colorScale - function taking field name => color
-      // x, y - legend positioning
-    
+    function addFieldLegend(svg, categories, colorScale, x=30, y=10) {    
       const legend = svg.append('g')
         .attr('class', 'legend')
         .attr('transform', `translate(${x},${y})`);
@@ -111,6 +106,7 @@
         .attr('transform', 'rotate(-45)')
         .style('text-anchor', 'end');
 
+      console.log(rawData.map(d => d.Field));
       g.selectAll('.bar')
         .data(rawData)
         .enter()
@@ -120,11 +116,11 @@
         .attr('y', d => y(d.All_Workers))
         .attr('width', x.bandwidth())
         .attr('height', d => height - y(d.All_Workers))
-        //.attr('fill', d => fieldColors(d.Field));
-        //.on('click', (event, d) => showDetailScene(d));
+        .attr('fill', d => fieldColors(d.Field))
+        .on('click', (event, d) => showDetailScene(d));
 
       addAnnotation(g, "Click a bar to see occupation-level earnings.");
-      //addFieldLegend(svg, fieldColors.domain(), fieldColors, width - 180, 30);
+      addFieldLegend(svg, fieldColors.domain(), fieldColors, width - 180, 60);
     }
 
     function showDetailScene(d) {
@@ -152,11 +148,12 @@
       ];
 
       addAnnotation(g, `All Workers: $${d.All_Workers}`, 0, 40);
-      addAnnotation(g, `Male: $${d.Male}`, 0, 70);
-      addAnnotation(g, `Female: $${d.Female}`, 0, 100);
-      addAnnotation(g, `Difference: $${d.Difference}`, 0, 130);
-      addAnnotation(g, `Statistically Significant: ${d.Significant === '*' ? 'Yes' : 'No'}`, 0, 160);
-      addAnnotation(g, 'Click below to compare occupations by significance.', 0, 220);
+      addAnnotation(g, `Field: $${d.Field}`, 0, 70);
+      addAnnotation(g, `Male: $${d.Male}`, 0, 100);
+      addAnnotation(g, `Female: $${d.Female}`, 0, 130);
+      addAnnotation(g, `Difference: $${d.Difference}`, 0, 160);
+      addAnnotation(g, `Statistically Significant: ${d.Significant === '*' ? 'Yes' : 'No'}`, 0, 190);
+      addAnnotation(g, 'Click below to compare occupations by significance.', 0, 250);
 
       container.append('button')
         .text('Compare by Significance')
