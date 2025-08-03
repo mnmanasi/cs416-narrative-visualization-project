@@ -6,16 +6,15 @@
   <script src="https://d3js.org/d3.v5.min.js"></script>
   <style>
     body { font-family: Arial, sans-serif; margin: 30px; }
-    svg { width: 100%; height: 500px; }
+    svg { width: 960px; height: 500px; }
     .bar { cursor: pointer; }
-    .annotation { font-size: 12px; fill: black; }
-    .back-button { margin-bottom: 20px; cursor: pointer; color: blue; text-decoration: underline; display: none; }
+    .annotation { font-size: 14px; fill: black; font-weight: bold; }
+    .back-button { cursor: pointer; color: blue; text-decoration: underline; margin-bottom: 20px; display: none; }
   </style>
 </head>
 <body>
   <h1>Gender Pay Gaps in STEM Occupations</h1>
   <div class="back-button" onclick="showOverview()" style="margin-bottom: 20px; cursor: pointer; color: blue; text-decoration: underline; display: none;">&larr; Back</div> 
-  <svg width="150" height="300"></svg>
   <div id="scene"></div>
   
   <script>
@@ -27,11 +26,14 @@
       currentScene: 'overview',
     };
 
+    const margin = { top: 40, right: 20, bottom: 100, left: 80 };
+    const width = 960 - margin.left - margin.right;
+    const height = 500 - margin.top - margin.bottom;
+    
     function clearScene() {
       d3.select('#scene').html('');
-    }
-
-
+    }   
+    
     function showOverview() {
       params.currentScene = 'overview';
       d3.select('.back-button').style('display', 'none');
@@ -39,9 +41,6 @@
 
       const container = d3.select('#scene');
       const svg = container.append('svg');
-      const margin = { top: 40, right: 20, bottom: 100, left: 80 };
-      const width = 960 - margin.left - margin.right;
-      const height = 500 - margin.top - margin.bottom;
       const g = svg.append('g').attr('transform', `translate(${margin.left},${margin.top})`);
 
       const x = d3.scaleBand()
@@ -72,13 +71,13 @@
         .attr('width', x.bandwidth())
         .attr('height', d => height - y(d.Difference))
         .attr('fill', d => d.Significant === '*' ? '#ff7f0e' : '#1f77b4')
-        .on('click', d => showScene2(d));
+        .on('click', d => showScene2);
 
       // Annotation
       g.append("text")
         .attr("class", "annotation")
         .attr("x", width - 300)
-        .attr("y", 10)
+        .attr("y", 0)
         .text("Click a bar to see occupation-level earnings.");
     }
 
@@ -92,29 +91,29 @@
       const svg = container.append('svg');
 
       svg.append('text')
-        .attr('x', 20)
-        .attr('y', 30)
+        .attr('x', 0)
+        .attr('y', 0)
         .attr('font-size', 20)
         .text(d.Occupation);
 
       const annotations = [
-        `All Workers: $${d.All_Workers.toLocaleString()}`,
-        `Male: $${d.Male.toLocaleString()}`,
-        `Female: $${d.Female.toLocaleString()}`,
-        `Difference: $${d.Difference.toLocaleString()}`,
+        `All Workers: $${d.All_Workers}`,
+        `Male: $${d.Male}`,
+        `Female: $${d.Female}`,
+        `Difference: $${d.Difference}`,
         `Statistically Significant: ${d.Significant === '*' ? 'Yes' : 'No'}`
       ];
 
       annotations.forEach((text, i) => {
         svg.append('text')
-          .attr('x', 20)
-          .attr('y', 60 + i * 30)
+          .attr('x', 0)
+          .attr('y', 40 + i * 30)
           .attr('class', 'annotation')
           .text(text);
       });
 
       svg.append('text')
-        .attr('x', 20)
+        .attr('x', 0)
         .attr('y', 250)
         .attr('class', 'annotation')
         .text('Click below to compare occupations by significance.');
@@ -131,9 +130,6 @@
 
       const container = d3.select('#scene');
       const svg = container.append('svg');
-      const margin = { top: 40, right: 20, bottom: 100, left: 80 };
-      const width = 960 - margin.left - margin.right;
-      const height = 500 - margin.top - margin.bottom;
       const g = svg.append('g').attr('transform', `translate(${margin.left},${margin.top})`);
 
       const grouped = d3.groups(rawData, d => d.Significant === '*' ? 'Significant' : 'Not Significant');
@@ -167,17 +163,17 @@
       g.append("text")
         .attr("class", "annotation")
         .attr("x", width - 300)
-        .attr("y", 10)
-        .text("This view compares counts of significant vs. non-significant gaps.");
+        .attr("y", 0)
+        .text("Counts of occupations by significance.");
     }
 
 
     d3.csv(csvUrl, d => ({
       Occupation: d.Occupation,
-      All_Workers: +d.All,
-      Male: +d.Male,
-      Female: +d.Female,
-      Difference: +d.Difference,
+      All_Workers: +d.All.replace(/,/g, ''),
+      Male: +d.Male.replace(/,/g, ''),
+      Female: +d.Female.replace(/,/g, ''),
+      Difference: +d.Difference.replace(/,/g, ''),
       Significant: d.Significant
     })).then(data => {
       rawData = data;
