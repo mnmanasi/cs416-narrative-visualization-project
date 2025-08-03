@@ -29,6 +29,11 @@
     const margin = { top: 40, right: 20, bottom: 100, left: 80 };
     const width = 960 - margin.left - margin.right;
     const height = 500 - margin.top - margin.bottom;
+
+    const fieldColors = d3.scaleOrdinal()
+      .domain(['S&E', 'S&E-related', 'STEM middle-skill'])
+      .range(['#53b87d', '#5359ad', '#b33e56']);
+
     
     function clearScene() {
       d3.select('#scene').html('');
@@ -41,6 +46,43 @@
         .attr("y", y)
         .text(text);
     }
+
+    function addFieldLegend(svg, categories, colorScale, x=30, y=10) {
+      // svg - the D3 SVG selection
+      // categories - array of field names
+      // colorScale - function taking field name => color
+      // x, y - legend positioning
+    
+      const legend = svg.append('g')
+        .attr('class', 'legend')
+        .attr('transform', `translate(${x},${y})`);
+    
+      const size = 18;   // Box size
+      const spacing = 6; // Spacing between items
+    
+      categories.forEach((cat, i) => {
+        legend.append('rect')
+          .attr('x', 0)
+          .attr('y', i * (size + spacing))
+          .attr('width', size)
+          .attr('height', size)
+          .attr('fill', colorScale(cat));
+    
+        legend.append('text')
+          .attr('x', size + 8)
+          .attr('y', i * (size + spacing) + size * 0.75)
+          .attr('font-size', 14)
+          .text(cat);
+      });
+    
+      legend.append('text')
+        .attr('x', 0)
+        .attr('y', -8)
+        .attr('font-size', 15)
+        .attr('font-weight', 'bold')
+        .text('Field Legend');
+    }
+
     
     function showOverview() {
       params.currentScene = 'overview';
@@ -57,7 +99,7 @@
         .padding(0.2);
 
       const y = d3.scaleLinear()
-        .domain([0, d3.max(rawData, d => d.Difference)]).nice()
+        .domain([0, d3.max(rawData, d => d.All_Workers)]).nice()
         .range([height, 0]);
 
       g.append('g').call(d3.axisLeft(y));
@@ -75,14 +117,14 @@
         .append('rect')
         .attr('class', 'bar')
         .attr('x', d => x(d.Occupation))
-        .attr('y', d => y(d.Difference))
+        .attr('y', d => y(d.All_Workers))
         .attr('width', x.bandwidth())
-        .attr('height', d => height - y(d.Difference))
-        .attr('fill', d => d.Significant === '*' ? '#ff7f0e' : '#1f77b4')
+        .attr('height', d => height - y(d.All_Workers))
+        .attr('fill', d => fieldColors(d.Field));
         .on('click', (event, d) => showDetailScene(d));
 
-      // Annotation
       addAnnotation(g, "Click a bar to see occupation-level earnings.");
+      addFieldLegend(svg, fieldColors.domain(), fieldColors, width - 180, 30);
     }
 
     function showDetailScene(d) {
@@ -164,6 +206,7 @@
 
     d3.csv(csvUrl, d => ({
       Occupation: d['Detailed occupations'],
+      Field: d['Field'],
       All_Workers:  +d['All workers'],
       Male: +d['Male'],
       Female: +d['Female'],
