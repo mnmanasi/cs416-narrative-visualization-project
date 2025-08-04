@@ -1,4 +1,4 @@
-﻿Detailed occupations,Field,All workers,Male,Female,Difference,Significant
+Detailed occupations,Field,All workers,Male,Female,Difference,Significant
 School psychologists,S&E,74821,82393,74525,7868,empty
 Chemists and materials scientists,S&E,74482,74922,71629,3293,empty
 "Computer occupations, all other",S&E,72981,74303,69722,4581,*
@@ -29,4 +29,3 @@ Roofers,STEM middle-skill,37431,37452,28563,-8889, empty
 "Drywall installers, ceiling tile installers, and tapers",STEM middle-skill,36024,36400,31585,4815, empty
 Chefs and head cooks,STEM middle-skill,35852,39549,29536,10013,*
 "Butchers and other meat, poultry, and fish processing workers",STEM middle-skill,35844,37813,29852,7961,*
-
