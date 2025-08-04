@@ -14,7 +14,7 @@
 </head>
 <body>
   <h1>Gender Pay Gaps in STEM Occupations</h1>
-  <div class="back-button" onclick="showOverview()" style="margin-bottom: 20px; cursor: pointer; color: blue; text-decoration: underline; display: none;">&larr; Back</div> 
+  <div class="back-button" onclick="goBack()" style="margin-bottom: 20px; cursor: pointer; color: blue; text-decoration: underline; display: none;">&larr; Back</div> 
   <div id="scene"></div>
   
   <script>
@@ -38,6 +38,14 @@
     function clearScene() {
       d3.select('#scene').html('');
     }   
+
+    function goBack() {
+      if (params.currentScene === 'detail') {
+        showOverview();
+      } else if (params.currentScene === 'compareField') {
+        showDetailScene(selectedCategory);
+      }
+    }
 
     function addAnnotation(svg, text, x = width - 300, y = -20) {
       svg.append("text")
@@ -106,7 +114,6 @@
         .attr('transform', 'rotate(-45)')
         .style('text-anchor', 'end');
 
-      console.log(rawData.map(d => d.Field));
       g.selectAll('.bar')
         .data(rawData)
         .enter()
@@ -117,7 +124,7 @@
         .attr('width', x.bandwidth())
         .attr('height', d => height - y(d.All_Workers))
         .attr('fill', d => fieldColors(d.Field))
-        .on('click', (event, d) => showDetailScene(d));
+        .on('click', d => showDetailScene(d));
 
       addAnnotation(g, "Click a bar to see occupation-level earnings.");
       addFieldLegend(svg, fieldColors.domain(), fieldColors, width - 180, 60);
@@ -126,6 +133,7 @@
     function showDetailScene(d) {
       params.currentScene = 'detail';
       selectedCategory = d;
+      console.log(d);
       d3.select('.back-button').style('display', 'block');
       clearScene();
 
@@ -135,49 +143,22 @@
 
       g.append('text')
         .attr('x', 0)
-        .attr('y', 0)
+        .attr('y', -10)
         .attr('font-size', 20)
         .text(d.Occupation);
 
-      const annotations = [
-        `All Workers: $${d.All_Workers}`,
-        `Male: $${d.Male}`,
-        `Female: $${d.Female}`,
-        `Difference: $${d.Difference}`,
-        `Statistically Significant: ${d.Significant === '*' ? 'Yes' : 'No'}`
+      const genderData = [
+        { gender: 'Male', value: d.Male },
+        { gender: 'Female', value: d.Female }
       ];
 
-      addAnnotation(g, `All Workers: $${d.All_Workers}`, 0, 40);
-      addAnnotation(g, `Field: $${d.Field}`, 0, 70);
-      addAnnotation(g, `Male: $${d.Male}`, 0, 100);
-      addAnnotation(g, `Female: $${d.Female}`, 0, 130);
-      addAnnotation(g, `Difference: $${d.Difference}`, 0, 160);
-      addAnnotation(g, `Statistically Significant: ${d.Significant === '*' ? 'Yes' : 'No'}`, 0, 190);
-      addAnnotation(g, 'Click below to compare occupations by significance.', 0, 250);
-
-      container.append('button')
-        .text('Compare by Significance')
-        .on('click', showSignificanceScene);
-    }
-
-    function showScene3() {
-      params.currentScene = 'significance';
-      d3.select('.back-button').style('display', 'block');
-      clearScene();
-
-      const container = d3.select('#scene');
-      const svg = container.append('svg');
-      const g = svg.append('g').attr('transform', `translate(${margin.left},${margin.top})`);
-
-      const grouped = d3.groups(rawData, d => d.Significant === '*' ? 'Significant' : 'Not Significant');
-
       const x = d3.scaleBand()
-        .domain(grouped.map(d => d[0]))
-        .range([0, width])
+        .domain(genderData.map(d => d.gender))
+        .range([0, width / 3])
         .padding(0.4);
 
       const y = d3.scaleLinear()
-        .domain([0, d3.max(grouped, d => d[1].length)]).nice()
+        .domain([0, d3.max(genderData, d => d.value)]).nice()
         .range([height, 0]);
 
       g.append('g').call(d3.axisLeft(y));
@@ -186,18 +167,72 @@
         .attr('transform', `translate(0,${height})`)
         .call(d3.axisBottom(x));
 
+      console.log(genderData.map(d => d.gender));
       g.selectAll('.bar')
-        .data(grouped)
+        .data(genderData)
         .enter()
         .append('rect')
         .attr('class', 'bar')
-        .attr('x', d => x(d[0]))
-        .attr('y', d => y(d[1].length))
+        .attr('x', d => x(d.gender))
+        .attr('y', d => y(d.value))
         .attr('width', x.bandwidth())
-        .attr('height', d => height - y(d[1].length))
-        .attr('fill', d => d[0] === 'Significant' ? '#ff7f0e' : '#1f77b4');
+        .attr('height', d => height - y(d.value))
+        .attr('fill', d => d.gender === 'Male' ? '#1f77b4' : '#f257ac')
+        .on('click', d => {
+          showFieldComparisonScene(d.gender);
+        });
 
-      addAnnotation(g, "Counts of occupations by significance.");
+      addAnnotation(g, `Statistically Significant: ${d.Significant === '*' ? 'Yes' : 'No'}`, 0, height + 50);
+      addAnnotation(g, `Click a bar to compare earnings in ${d.Field}`, 0, height + 80);
+    }
+
+    function showFieldComparisonScene(clickedGender) {
+      params.currentScene = 'compareField';
+      d3.select('.back-button').style('display', 'block');
+      clearScene();
+
+      const field = selectedCategory.Field;
+      const genderField = clickedGender; // 'Male' or 'Female'
+      const fieldData = rawData
+        .filter(d => d.Field === field)
+        .sort((a, b) => b[genderField] - a[genderField]);
+
+      const container = d3.select('#scene');
+      const svg = container.append('svg');
+      const g = svg.append('g').attr('transform', `translate(${margin.left},${margin.top})`);
+
+      const x = d3.scaleBand()
+        .domain(fieldData.map(d => d.Occupation))
+        .range([0, width])
+        .padding(0.2);
+
+      const y = d3.scaleLinear()
+        .domain([0, d3.max(fieldData, d => d[genderField])]).nice()
+        .range([height, 0]);
+
+      const color = genderField === 'Male' ? '#1f77b4' : '#f257ac';
+
+      g.append('g').call(d3.axisLeft(y));
+
+      g.append('g')
+        .attr('transform', `translate(0,${height})`)
+        .call(d3.axisBottom(x))
+        .selectAll('text')
+        .attr('transform', 'rotate(-45)')
+        .style('text-anchor', 'end');
+
+      g.selectAll('.bar')
+        .data(fieldData)
+        .enter()
+        .append('rect')
+        .attr('class', 'bar')
+        .attr('x', d => x(d.Occupation))
+        .attr('y', d => y(d[genderField]))
+        .attr('width', x.bandwidth())
+        .attr('height', d => height - y(d[genderField]))
+        .attr('fill', color);
+
+      addAnnotation(g, `${genderField} earnings across ${field} occupations (sorted)`, 0, -10);
     }
 
 
