@@ -15,6 +15,18 @@
 <body>
   <h1>Gender Pay Gaps in STEM Occupations</h1>
   <div class="back-button" onclick="goBack()" style="margin-bottom: 20px; cursor: pointer; color: blue; text-decoration: underline; display: none;">&larr; Back</div> 
+  <div id="tooltip" style="
+    position: absolute;
+    pointer-events: none;
+    background: white;
+    border: 1px solid #ccc;
+    padding: 8px;
+    border-radius: 4px;
+    font-size: 14px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    display: none;
+    z-index: 10;">
+  </div>
   <div id="scene"></div>
   
   <script>
@@ -34,7 +46,6 @@
       .domain(['S&E', 'S&E-related', 'STEM middle-skill'])
       .range(['#53b87d', '#5359ad', '#b33e56']);
 
-    
     function clearScene() {
       d3.select('#scene').html('');
     }   
@@ -124,7 +135,20 @@
         .attr('width', x.bandwidth())
         .attr('height', d => height - y(d.All_Workers))
         .attr('fill', d => fieldColors(d.Field))
-        .on('click', d => showDetailScene(d));
+        .on('click', d => showDetailScene(d))
+        .on('mousemove', d => {
+          d3.select("#tooltip")
+            .style('display', 'block')
+            .html(`
+              <strong>Occupation:</strong> ${d.Occupation}<br>
+              <strong>Median Income:</strong> $${d.All_Workers.toLocaleString()}
+            `)
+            .style('left', (event.pageX + 12) + 'px')
+            .style('top', (event.pageY - 24) + 'px');
+        })
+        .on('mouseleave', function() {
+          d3.select("#tooltip").style('display', 'none');
+        });
 
       addAnnotation(g, "Click a bar to see occupation-level earnings.");
       addFieldLegend(svg, fieldColors.domain(), fieldColors, width - 180, 60);
@@ -135,6 +159,7 @@
       selectedCategory = d;
       console.log(d);
       d3.select('.back-button').style('display', 'block');
+      d3.select("#tooltip").style('display', 'none');
       clearScene();
 
       const container = d3.select('#scene');
@@ -180,6 +205,18 @@
         .attr('fill', d => d.gender === 'Male' ? '#1f77b4' : '#f257ac')
         .on('click', d => {
           showFieldComparisonScene(d.gender);
+        })
+        .on('mousemove', d => {
+          d3.select("#tooltip")
+            .style('display', 'block')
+            .html(`
+              <strong>Median Income (${d.gender}):</strong> $${d.value.toLocaleString()}
+            `)
+            .style('left', (event.pageX + 12) + 'px')
+            .style('top', (event.pageY - 24) + 'px');
+        })
+        .on('mouseleave', function() {
+          d3.select("#tooltip").style('display', 'none');
         });
 
       addAnnotation(g, `Statistically Significant: ${d.Significant === '*' ? 'Yes' : 'No'}`, 0, height + 50);
@@ -189,6 +226,7 @@
     function showFieldComparisonScene(clickedGender) {
       params.currentScene = 'compareField';
       d3.select('.back-button').style('display', 'block');
+      d3.select("#tooltip").style('display', 'none');
       clearScene();
 
       const field = selectedCategory.Field;
@@ -230,7 +268,26 @@
         .attr('y', d => y(d[genderField]))
         .attr('width', x.bandwidth())
         .attr('height', d => height - y(d[genderField]))
-        .attr('fill', color);
+        .attr("fill", d => {
+          if (d.Occupation === selectedCategory.Occupation) {
+            return clickedGender === 'Male' ? '#1f77b4' : '#f257ac'; // normal colors
+          } else {
+            return clickedGender === 'Male' ? '#59aae3' : '#f7a3d1'; // lighter version
+          }
+        })
+        .on('mousemove', d => {
+          d3.select("#tooltip")
+            .style('display', 'block')
+            .html(`
+              <strong>Field:</strong> ${d.Field}<br>
+              <strong>Median Income (${clickedGender}):</strong> $${d[clickedGender].toLocaleString()}
+            `)
+            .style('left', (event.pageX + 12) + 'px')
+            .style('top', (event.pageY - 24) + 'px');
+        })
+        .on('mouseleave', function() {
+          d3.select("#tooltip").style('display', 'none');
+        });
 
       addAnnotation(g, `${genderField} earnings across ${field} occupations (sorted)`, 0, -10);
     }
