@@ -219,8 +219,13 @@
           d3.select("#tooltip").style('display', 'none');
         });
 
-      addAnnotation(g, `Statistically Significant: ${d.Significant === '*' ? 'Yes' : 'No'}`, 0, height + 50);
-      addAnnotation(g, `Click a bar to compare earnings in ${d.Field}`, 0, height + 80);
+      addAnnotation(g, `Difference in Male to Female Median Income: $${d.Difference}`, 0, height + 50);
+      if (d.Significant === '*') {
+        addAnnotation(g, "The difference in male and female median income is statistically significant (p < 0.05).", 0, height + 50);
+      } else {
+        addAnnotation(g, "This gender difference is not statistically significant.", 0, height + 80);
+      }
+      addAnnotation(g, `Click a bar to compare earnings in ${d.Field}`, 0, height + 110);
     }
 
     function showFieldComparisonScene(clickedGender) {
@@ -279,7 +284,7 @@
           d3.select("#tooltip")
             .style('display', 'block')
             .html(`
-              <strong>Field:</strong> ${d.Field}<br>
+            <strong>Occupation:</strong> ${d.Occupation}<br>  
               <strong>Median Income (${clickedGender}):</strong> $${d[clickedGender].toLocaleString()}
             `)
             .style('left', (event.pageX + 12) + 'px')
@@ -291,7 +296,6 @@
 
       addAnnotation(g, `${genderField} earnings across ${field} occupations (sorted)`, 0, -10);
     }
-
 
     d3.csv(csvUrl, d => ({
       Occupation: d['Detailed occupations'],
